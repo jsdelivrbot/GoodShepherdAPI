@@ -1,0 +1,32 @@
+{
+  "name": "goodshepherdapi",
+  "version": "1.0.0",
+  "description": "this is the api for Good Shepherd App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luisperezzz/GoodShepherdAPI.git"
+  },
+  "keywords": [
+    "API",
+    "good",
+    "shepherd"
+  ],
+  "author": "Luis Perez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/luisperezzz/GoodShepherdAPI/issues"
+  },
+  "homepage": "https://github.com/luisperezzz/GoodShepherdAPI#readme",
+  "devDependencies": {
+    "nodemon": "^1.14.3"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongoose": "^4.13.7"
+  }
+}
