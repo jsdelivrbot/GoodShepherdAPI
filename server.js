@@ -1,13 +1,26 @@
+
+var app   = require('./app');
+var port  = process.env.PORT || 3000;
+
+var server = app.listen(
+  port, function() {
+    console.log('Express server listening on port '+port)
+  }
+);
+
+
+/*
+
 var express = require('express'),
   app = express(),
   port = process.env.PORT || 3000;
-  mongoose = require('mongoose'),
-  Contact = require('./api/models/ContactModel'), //created model loading here
+  mongoose = require('mongoose');
+  Contact = require('./api/models/ContactModel'); //created model loading here
   bodyParser = require('body-parser');
 
   // mongoose instance connection url connection
   mongoose.Promise = global.Promise;
-  mongoose.connect('mongodb://localhost/GoodShephardDB'); 
+  mongoose.connect('mongodb://localhost/GoodShephardDB');
 
 
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,3 +33,5 @@ var express = require('express'),
 app.listen(port);
 
 console.log('todo list RESTful API server started on: ' + port);
+
+*/
