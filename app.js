@@ -2,10 +2,12 @@ const express = require('express'); // express is a function that is returned wh
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
 const productRoutes = require('./api/routes/products')
 const orderRoutes = require('./api/routes/orders')
 
+mongoose.connect("mongodb://lpramirez:Xtomili2413!@democluster-shard-00-00-q6ij8.mongodb.net:27017,democluster-shard-00-01-q6ij8.mongodb.net:27017,democluster-shard-00-02-q6ij8.mongodb.net:27017/test?ssl=true&replicaSet=DemoCluster-shard-0&authSource=admin");
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));

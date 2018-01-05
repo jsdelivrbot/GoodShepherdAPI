@@ -1,5 +1,5 @@
 {
-  "name": "rest-shop",
+  "name": "goodshepherd",
   "version": "1.0.0",
   "description": "A Node.js RESTful API Tutorial Project",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "keywords": [
     "node",
-    "resful",
+    "restful",
     "api"
   ],
   "author": "Luis Perez",
@@ -17,9 +17,18 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "mongoose": "^5.0.0-rc2",
     "morgan": "^1.9.0"
   },
   "devDependencies": {
     "nodemon": "^1.14.7"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luisperezzz/GoodShepherdAPI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/luisperezzz/GoodShepherdAPI/issues"
+  },
+  "homepage": "https://github.com/luisperezzz/GoodShepherdAPI#readme"
 }
