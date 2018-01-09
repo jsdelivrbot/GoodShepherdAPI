@@ -1,31 +1,37 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.3.0",
-  "description": "A sample Node.js app using Express 4",
+  "name": "goodshepherdapi",
+  "version": "1.0.0",
+  "description": "A Node.js RESTful API Tutorial Project",
   "engines": {
-    "node": "8.9.1"
+    "node": "8.9.3"
   },
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "node test.js"
-  },
-  "dependencies": {
-    "ejs": "^2.5.6",
-    "express": "^4.15.2"
-  },
-  "devDependencies": {
-    "request": "^2.81.0",
-    "tape": "^4.7.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
   "keywords": [
     "node",
-    "heroku",
-    "express"
+    "restful",
+    "api"
   ],
-  "license": "MIT"
+  "author": "Luis Perez",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongoose": "^5.0.0-rc2",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luisperezzz/GoodShepherdAPI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/luisperezzz/GoodShepherdAPI/issues"
+  },
+  "homepage": "https://github.com/luisperezzz/GoodShepherdAPI#readme"
 }
