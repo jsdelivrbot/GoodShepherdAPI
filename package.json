@@ -18,6 +18,7 @@
   "author": "Luis Perez",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^2.5.6",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "mongoose": "^5.0.0-rc2",
