@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const productRoutes = require('./api/routes/products')
 const orderRoutes = require('./api/routes/orders')
 const userRoutes = require('./api/routes/users')
+const apiRoutes = require('./api/routes/api')
 
 const app = express();
 
@@ -18,9 +19,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json())
 
 // Routes which should handle request
-app.use('/products', productRoutes);
-app.use('/orders', orderRoutes);
-app.use('/users', userRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api', apiRoutes);
 
 /*
 app.use((request, response, next) => {
