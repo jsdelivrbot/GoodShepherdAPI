@@ -1,4 +1,12 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
+var config = require('../../config'); // get our config file
+const app = express();
+app.set('superSecret', config.secret); // secret variable
+
+const bcrypt = require('bcrypt');
+
+
 const router = express.Router();
 const User = require('../models/user');
 
@@ -9,16 +17,43 @@ router.get('/', (request, response, next) => {
 });
 
 router.post('/authenticate', (request, response, next) => {
-    /*
+    
     User.findOne({
-        name: req.body.name
+        username: request.body.username
       }).exec()
-    .then(doc => {
-        console.log(doc)
-        if (doc) {
-            response.status(200).json(doc);
+    .then(user => {
+        
+        if (user) {
+            if (bcrypt.compareSync(request.body.password, user.password)) {
+                
+                const payload = {
+                    admin: user.admin 
+                };
+                
+                var token = jwt.sign(payload, app.get('superSecret'), {
+                    expiresIn: 1440 // minutes (ej expires in 24 hours)
+                });
+                // return the information including token as JSON
+                var userJSON = user.toJSON();
+                delete userJSON.password
+                response.status(200).json({
+                    data: {
+                        user:userJSON,
+                        token:token
+                    }
+                });
+            }
+            else {
+
+            }
+
+
         } else {
-            response.status(404).json({message:'No valid entry found for provided ID'});
+            response.status(401).json(
+                {
+                    message:'Authentication failed'
+                }
+            );
         }
         
     })
@@ -29,9 +64,9 @@ router.post('/authenticate', (request, response, next) => {
         });
     });
 
-    */
+    /*
     User.findOne({
-        name: request.body.name
+        name: request.body.username
       }, function(err, user) {
         if (err) throw err;
         if (!user) {
@@ -68,6 +103,7 @@ router.post('/authenticate', (request, response, next) => {
             }   
         }
     });
+    */
 });
 
 
