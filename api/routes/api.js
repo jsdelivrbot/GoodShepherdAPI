@@ -11,6 +11,7 @@ const router = express.Router();
 const User = require('../models/user');
 
 
+
 // Authentication Method
 
 router.post('/authenticate', (request, response, next) => {
@@ -101,53 +102,6 @@ router.use((request, response, next) => {
         );
     }
 
-    /*
-
-    var token = request.headers['Authorization'];
-    // decode token
-    if (token) {
-        // verifies secret and checks exp
-        
-        jwt.verify(token, app.get('superSecret'), function(err, decoded) {
-            if (err) {
-                
-                return response.json(
-                    {  
-                        message: 'Failed to authenticate token.' ,
-                        success: false
-                    }
-                );    
-            } else {
-                console.log('encoded')
-                // if everything is good, save to request for use in other routes
-                request.decoded = decoded;    
-                next();
-            }
-        });
-    } else {
-        // if there is no token
-        // return an error
-        return response.status(403).send(
-            {  
-                message: 'No token provided.',
-                success: false
-            }
-        );
-    }
-
-
-    */
-});
-
-
-/*
-router.get('/', (request, response, next) => {
-    response.status(200).json({
-        message:'Welcome to the GoodShepherd API'
-    });
-});
-
-*/
 
 router.post('/', (request, response, next) => {
     response.status(200).json({
