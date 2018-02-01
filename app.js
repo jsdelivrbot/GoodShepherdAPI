@@ -22,7 +22,8 @@ app.use(bodyParser.json())
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api', apiRoutes);
+
+
 
 /*
 app.use((request, response, next) => {
@@ -32,6 +33,7 @@ app.use((request, response, next) => {
 });
 */
 
+/*
 app.use((error, request, response, next) => {
     response.status(error.status || 500);
     response.json({
@@ -41,5 +43,39 @@ app.use((error, request, response, next) => {
         }
     });
 });
+*/
+
+apiRoutes.use((request, response, next) => {
+    var token = request.body.token || request.query.token || request.headers['x-access-token'];
+    // decode token
+    if (token) {
+        // verifies secret and checks exp
+        jwt.verify(token, app.get('superSecret'), function(err, decoded) {
+            if (err) {
+                return response.json(
+                    {  
+                        message: 'Failed to authenticate token.' ,
+                        success: false
+                    }
+                );    
+            } else {
+                // if everything is good, save to request for use in other routes
+                request.decoded = decoded;    
+                next();
+            }
+        });
+    } else {
+        // if there is no token
+        // return an error
+        return response.status(403).send(
+            {  
+                message: 'No token provided.',
+                success: false
+            }
+        );
+    }
+});
+
+app.use('/api', apiRoutes);
 
 module.exports = app

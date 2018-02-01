@@ -40,18 +40,31 @@ router.post('/authenticate', (request, response, next) => {
                     data: {
                         user:userJSON,
                         token:token
-                    }
+                    },
+                    success: true
                 });
             }
             else {
-
+                response.status(401).json(
+                    {
+                        error:{
+                            code: 401,
+                            message:'Authentication failed'
+                        },
+                        success: false
+                    }
+                );
             }
 
 
         } else {
             response.status(401).json(
                 {
-                    message:'Authentication failed'
+                    error:{
+                        code: 401,
+                        message:'Authentication failed'
+                    },
+                    success: false
                 }
             );
         }
