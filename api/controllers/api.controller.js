@@ -1,27 +1,18 @@
-const express = require('express');
 const jwt = require('jsonwebtoken');
 var config = require('../../config'); // get our config file
-const app = express();
-app.set('superSecret', config.secret); // secret variable
+
 
 const bcrypt = require('bcrypt');
+const User = require('../models/user')
 
 
-const router = express.Router();
-const User = require('../models/user');
-
-
-
-
-// Authentication Method
-
-router.post('/authenticate', (request, response, next) => {
-    
+exports.authenticate = function(req, res) {
+   
     User.findOne({username: request.body.username}).exec()
     .then(user => {
         if (user) {
             if (bcrypt.compareSync(request.body.password, user.password)) {
-                var JWToken = jwt.sign({email:user.email, id:user._id}, app.get('superSecret'), {expiresIn: 1440});
+                var JWToken = jwt.sign({email:user.email, id:user._id}, 'masterSecret', {expiresIn: 1440});
                 
                 var userJSON = user.toJSON();
                 delete userJSON.password
@@ -65,11 +56,15 @@ router.post('/authenticate', (request, response, next) => {
             error: err
         });
     });
-});
 
 
 
-router.use((request, response, next) => {
+
+};
+
+
+
+exports.validate = function(req, res) {
 
     if (request.headers && request.headers.authorization && request.headers.authorization.split(' ')[0] === 'JWT') {
         jwt.verify(request.headers.authorization.split(' ')[1], app.get('superSecret'), function(err, decoded) {
@@ -100,14 +95,19 @@ router.use((request, response, next) => {
             }
         );
     }
-});
 
-router.post('/', (request, response, next) => {
+};
+
+exports.authorized = function(req, res) {
+
     response.status(200).json({
         message:'Welcome to the GoodShepherd API'
     });
-});
+    
+
+};
 
 
 
-module.exports = router;
+
+
