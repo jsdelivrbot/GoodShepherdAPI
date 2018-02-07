@@ -3,6 +3,7 @@ module.exports = function(app) {
 
     var userController = require('../controllers/user.controller.js');
     
+    app.post('/api/users/setup', userController.setup);         // Create User
     app.post('/api/users', userController.create);              // Create User
     app.get('/api/users', userController.findAll);              // Get users
     app.get('/api/users/:userId', userController.findOne);      // Get user by ID

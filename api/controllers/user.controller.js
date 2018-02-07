@@ -3,7 +3,7 @@ var User = require('../models/user.js');
 
 exports.setup = function(req, res) {
 
-    var luis = new User({username : 'Luis', password : 'master', admin : true});
+    var luis = new User({email : 'luisperez.r@icloud.com', password : 'master', admin : true});
 
     luis.save(function(err, data) {
         if(err) {
@@ -14,14 +14,32 @@ exports.setup = function(req, res) {
                 }
             );
         } else {
-            response.status(200).json(
-                {
-                    data    : {user : luis},
-                    success : true
+            // save person info
+            
+            var person = new Person({userID : luis._id.toString(), firstName : 'Luis Arturo', lastName : 'Perez Ramirez', email : luis.email});
+
+            person.save(function(err, data){
+                if (err) {
+                    response.status(500).json(
+                        {
+                            error   : {code : 500, message : err}, 
+                            success : false
+                        }
+                    );
                 }
-            );
+                else {
+                    response.status(200).json(
+                        {
+                            data    : {user : luis, info: person},
+                            success : true
+                        }
+                    );
+                }
+            });
+
         }
     });
+
 
 };
 
