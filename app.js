@@ -15,7 +15,8 @@ app.use(morgan('dev')); // request logger
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json())
 
-// Routes which should handle request
+
+
 app.use('/api', apiRoutes);
 //require('./api/routes/api')(app);
 require('./api/routes/user.route')(app);
