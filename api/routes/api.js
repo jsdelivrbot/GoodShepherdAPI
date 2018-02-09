@@ -70,11 +70,9 @@ router.post('/signup', (request, response, next) => {
 
 router.post('/login', (request, response, next) => {
     
-    User.findOne({username: request.body.email}).exec()
+    User.findOne({email: request.body.email}).exec()
     .then(user => {
-        console.log('entra'+user);
         if (user) {
-            console.log('entra? 2');
             if (bcrypt.compareSync(request.body.password, user.password)) {
                 console.log('si entra');
                 var JWToken = jwt.sign({email:user.email, id:user._id}, app.get('superSecret'), {expiresIn: 1440});
@@ -199,8 +197,10 @@ router.post('/setup', (request, response, next) => {
 router.post('/authenticate', (request, response, next) => {
     
     
-    User.findOne({username: request.body.email}).exec()
+    User.findOne({email: request.body.email}).exec()
+
     .then(user => {
+        console.log('user'+user)
         if (user) {
             if (bcrypt.compareSync(request.body.password, user.password)) {
                 var JWToken = jwt.sign({email:user.email, id:user._id}, app.get('superSecret'), {expiresIn: 1440});
