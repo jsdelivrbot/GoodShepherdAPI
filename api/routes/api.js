@@ -13,7 +13,6 @@ const Person = require('../models/person');
 
 
 
-
 // Authentication Method
 
 
