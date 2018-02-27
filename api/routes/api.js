@@ -18,7 +18,18 @@ const Person = require('../models/person');
 
 router.post('/signup', (request, response, next) => {
 
-    var user = new User({email : request.body.email, password : request.body.password, admin : false});
+    var user = new User({
+        email : request.body.email, 
+        password : request.body.password, 
+        admin : false,
+        info : {
+            userID : user._id.toString(), 
+            firstName : request.body.firstName, 
+            lastName : request.body.lastName, 
+            email : user.email
+        }
+    });
+    
 
     user.save(function(err, data) {
         if(err) {

@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+const personSchema = require('../models/person');
+
 const userSchema = mongoose.Schema({
     email:{
         type : String,
@@ -11,7 +13,10 @@ const userSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    admin: Boolean
+    admin: Boolean,
+    info: {
+        type : personSchema
+    }
 }, { versionKey: false });
 
 // pre                                                                                                                                                                         

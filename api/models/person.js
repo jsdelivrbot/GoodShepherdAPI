@@ -9,4 +9,6 @@ const personSchema = mongoose.Schema({
     email       : {type : String, required : true}
 }, { versionKey: false });
 
-module.exports = mongoose.model('Person', personSchema)
+//module.exports = mongoose.model('Person', personSchema)
+
+module.exports = personSchema
