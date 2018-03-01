@@ -1,13 +1,21 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
+const express   = require('express');
+const router    = express.Router();
+const jwt       = require('jsonwebtoken');
+const app       = express();
+
+const { Pool, Client } = require('pg')
+const path = require('path');
+
+
+
 var config = require('../../config'); // get our config file
-const app = express();
+
 app.set('superSecret', config.secret); // secret variable
 
 const bcrypt = require('bcrypt');
 
 
-const router = express.Router();
+
 const User = require('../models/user');
 const Person = require('../models/person');
 
@@ -18,15 +26,54 @@ const Person = require('../models/person');
 
 router.post('/signup', (request, response, next) => {
 
+    const results = [];
+    const data = {email: request.body.email, password: request.body.password};
+    const client = new Client({
+        user: 'postgres',
+        host: 'localhost',
+        database: 'goodshepherddb',
+        password: 'master',
+        port: 5433,
+      })
+
+    client.connect((err, client, done) => {
+        
+        if(err) {
+            console.log(err);
+            response.status(500).json(
+                {
+                    error   : { code : 500, message : err }, 
+                    success : false
+                }
+            );
+        }
+        else {
+            client.query('INSERT INTO users(email, password) values($1, $2)', [data.email, data.password], function(err, result) {
+                if(err) {
+                    console.error('error running query', err);
+                }
+                else {
+                    console.log(result.rows[0]);
+                    client.end();
+                }
+            });
+        }
+
+    });
+    
+
+    /*
+    
+
     var user = new User({
         email : request.body.email, 
         password : request.body.password, 
         admin : false,
         info : {
-            userID : user._id.toString(), 
+            userID : "", 
             firstName : request.body.firstName, 
             lastName : request.body.lastName, 
-            email : user.email
+            email : request.body.email
         }
     });
     
@@ -40,35 +87,18 @@ router.post('/signup', (request, response, next) => {
                 }
             );
         } else {
-            // save person info
-            var person = new Person({userID : user._id.toString(), firstName : request.body.firstName, lastName : request.body.lastName, email : user.email});
 
-            person.save(function(err, data){
-                if (err) {
-                    // delete User
-                    response.status(500).json(
-                        {
-                            error   : {code : 500, message : err}, 
-                            success : false
-                        }
-                    );
+            response.status(200).json(
+                {
+                    data    : {user : user},
+                    success : true
                 }
-                else {
-                    var userJSON = user.toJSON();
-                    var personJSON = person.toJSON();
-                    delete userJSON.password
-                    delete personJSON._id
-                    response.status(200).json(
-                        {
-                            data    : {user : userJSON, info: personJSON},
-                            success : true
-                        }
-                    );
-                }
-            });
+            );
 
         }
     });
+
+    */
 
 });
 
