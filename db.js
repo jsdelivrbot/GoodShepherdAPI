@@ -1,16 +1,11 @@
-// db.js
-const { Pool, Client } = require('pg')
+var promise = require('bluebird');
+var options = {
+    promiseLib: promise
+};
 
-const client = new Client({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'goodshepherddb',
-    password: 'master',
-    port: 5433,
-  })
+var pgp = require('pg-promise')(options);
+var connectionString = 'postgres://postgres:master@localhost:5433/goodshepherddb';
+var db = pgp(connectionString);
 
-client.connect();
-const query = client.query('CREATE TABLE users (id SERIAL PRIMARY KEY, email VARCHAR(40) not null, password VARCHAR(100))', (err, res) =>{
-    console.log(err, res)
-    client.end()
-});
+module.exports = db;
+

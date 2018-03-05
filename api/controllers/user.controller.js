@@ -1,35 +1,55 @@
 var User = require('../models/user.js');
+var db = require('../../db.js');
 
 
 
 
 
-
-exports.findAll = function(request, response) {
-
-    User.find(function(err, docs){
-        if(err) {
-            response.status(500).json(
-                {
-                    error   : {code : 500, message : err},
-                    success : false
-                }
-            );
-        } else {
-            response.status(200).json(
-                {
-                    data    : {users : docs},
-                    success : true
-                }
-            );
-        }
+exports.getAll = function(request, response) {
+    db.any('SELECT * FROM users')
+    .then(function (data) {
+        response.status(200).json(
+            {
+                data    : {users : data},
+                success : true
+            }
+        );
+    })
+    .catch(function (err) {
+        response.status(500).json(
+            {
+                error   : {code : 500, message : err},
+                success : false
+            }
+        );
     });
-
 };
 
-exports.create = function(req, res) {
-    // Create and Save a new Note
+
+exports.create = function(request, response) {
+
+    req.body.age = parseInt(req.body.age);
+    db.none('insert into pups(name, breed, age, sex)'+'values(${name}, ${breed}, ${age}, ${sex})', req.body)
+    .then(function () {
+        response.status(200).json(
+            {
+                data    : {users : data},
+                success : true
+            }
+        );
+    })
+    .catch(function (err) {
+        response.status(500).json(
+            {
+                error   : {code : 500, message : err},
+                success : false
+            }
+        );
+    });
 };
+
+
+
 
 
 exports.findOne = function(req, res) {

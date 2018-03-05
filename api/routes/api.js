@@ -3,10 +3,7 @@ const router    = express.Router();
 const jwt       = require('jsonwebtoken');
 const app       = express();
 
-const { Pool, Client } = require('pg')
-const path = require('path');
-
-
+var db = require('../../db.js');
 
 var config = require('../../config'); // get our config file
 
@@ -21,166 +18,99 @@ const Person = require('../models/person');
 
 
 
+
 // Authentication Method
 
 
-router.post('/signup', (request, response, next) => {
+router.post('/signup', (request, response) => {
 
-    const results = [];
-    const data = {email: request.body.email, password: request.body.password};
-    const client = new Client({
-        user: 'postgres',
-        host: 'localhost',
-        database: 'goodshepherddb',
-        password: 'master',
-        port: 5433,
-      })
+    var password  = bcrypt.hashSync(request.body.password, 10);
 
-    client.connect((err, client, done) => {
+    db.none('INSERT INTO users(id, email, password, first_name, last_name)'+'VALUES($1, $2, $3, $4, $5)', [request.body.id, request.body.email, password, request.body.firstName, request.body.lastName])
+    .then(function (data) {
+        response.status(200).json(
+            {
+                data    : {message : 'User succesfully created.'},
+                success : true
+            }
+        );
+    })
+    .catch(function (err) {
+        response.status(500).json(
+            {
+                error   : {code : 500, message : err},
+                success : false
+            }
+        );
+    });
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+router.post('/login', (request, response) => {
+    var email = request.body.email
+    var password = request.body.password
+
+    db.one("SELECT * FROM users WHERE email = $1", email)
+    .then(function (data) {
         
-        if(err) {
-            console.log(err);
-            response.status(500).json(
-                {
-                    error   : { code : 500, message : err }, 
-                    success : false
-                }
-            );
-        }
-        else {
-            client.query('INSERT INTO users(email, password) values($1, $2)', [data.email, data.password], function(err, result) {
-                if(err) {
-                    console.error('error running query', err);
-                }
-                else {
-                    console.log(result.rows[0]);
-                    client.end();
-                }
-            });
-        }
+        if(bcrypt.compareSync(password, data['password'])) {
 
-    });
-    
-
-    /*
-    
-
-    var user = new User({
-        email : request.body.email, 
-        password : request.body.password, 
-        admin : false,
-        info : {
-            userID : "", 
-            firstName : request.body.firstName, 
-            lastName : request.body.lastName, 
-            email : request.body.email
-        }
-    });
-    
-
-    user.save(function(err, data) {
-        if(err) {
-            response.status(500).json(
-                {
-                    error   : {code : 500, message : err}, 
-                    success : false
-                }
-            );
-        } else {
+            console.log('entro'); 
+            var JWToken = jwt.sign({email:data['email'], id:data['id']}, app.get('superSecret'), {expiresIn: 1440});
+            delete data.password
+            data.token = JWToken
 
             response.status(200).json(
                 {
-                    data    : {user : user},
+                    data    : data,
                     success : true
-                }
+                }   
             );
-
-        }
-    });
-
-    */
-
-});
-
-
-
-
-
-
-
-router.post('/login', (request, response, next) => {
-    
-    User.findOne({email: request.body.email}).exec()
-    .then(user => {
-        if (user) {
-            if (bcrypt.compareSync(request.body.password, user.password)) {
-                console.log('si entra');
-                var JWToken = jwt.sign({email:user.email, id:user._id}, app.get('superSecret'), {expiresIn: 1440});
-                
-                var userJSON = user.toJSON();
-                delete userJSON.password
-
-
-                Person.findOne({ 'userID': user._id.toString() }, function (err, person) {
-                    if(err) {
-                        response.status(500).json(
-                            {
-                                error   : {code : 500, message : err},
-                                success : false
-                            }
-                        );
-                    } else {
-                        var userJSON = user.toJSON();
-                        var personJSON = person.toJSON();
-                        delete userJSON.password
-                        delete personJSON._id
-                        userJSON.token = JWToken
-                        response.status(200).json(
-                            {
-                                data    : {user : userJSON, info: personJSON},
-                                success : true
-                            }   
-                        );
-                    }
-                });
-
-            }
-            else {
-                response.status(401).json(
-                    {
-                        error:{
-                            code: 401,
-                            message:'Authentication failed'
-                        },
-                        success: false
-                    }
-                );
-            }
-
 
         } else {
+            // Passwords don't match
             response.status(401).json(
                 {
-                    error:{
-                        code: 401,
-                        message:'Authentication failed'
-                    },
-                    success: false
+                    error   : { code : 401, message : 'Authentication failed' },
+                    success : false
                 }
             );
+            
         }
         
     })
-    .catch(err =>{
-        console.log(err)
-        response.status(500).json({
-            error: err
-        });
+    .catch(function (err) {
+        
+        response.status(401).json(
+            {
+                error:{
+                    code: 401,
+                    message:'Authentication failed'
+                },
+                success: false
+            }
+        );
+        
     });
 
-
-
 });
+
+
 
 
 
