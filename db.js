@@ -4,8 +4,17 @@ var options = {
 };
 
 var pgp = require('pg-promise')(options);
-var connectionString = 'postgres://postgres:master@localhost:5433/goodshepherddb';
-var db = pgp(connectionString);
+
+const cn = {
+    host: 'goodshepherdinstance.cepumuej7bm2.us-east-1.rds.amazonaws.com',
+    port: 5432,
+    database: 'goodshepherddb',
+    user: 'lpramirez2413',
+    password: 'master'
+};
+
+//var connectionString = 'postgres://postgres:master@localhost:5433/goodshepherddb';
+var db = pgp(cn);
 
 module.exports = db;
 

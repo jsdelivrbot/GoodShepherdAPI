@@ -4,14 +4,10 @@ const jwt       = require('jsonwebtoken');
 const app       = express();
 
 var db = require('../../db.js');
-
 var config = require('../../config'); // get our config file
 
 app.set('superSecret', config.secret); // secret variable
-
 const bcrypt = require('bcrypt');
-
-
 
 const User = require('../models/user');
 const Person = require('../models/person');
