@@ -123,101 +123,37 @@ router.post('/login', (request, response) => {
 
 router.post('/setup', (request, response, next) => {
 
-    var luis = new User({email : 'luisperez.r@icloud.com', password : 'master', admin : true});
+    var id = 0
+    var email = "lpramirez2413@gmail.com"
+    var password = "master"
+    var firstName = "Luis"
+    var lastName = "Perez"
 
-    luis.save(function(err, data) {
-        if(err) {
-            response.status(500).json(
-                {
-                    error   : {code : 500, message : err}, 
-                    success : false
-                }
-            );
-        } else {
-            // save person info
-            
-            var person = new Person({userID : luis._id.toString(), firstName : 'Luis Arturo', lastName : 'Perez Ramirez', email : luis.email});
+    var hashedPassword  = bcrypt.hashSync(password, 10);
 
-            person.save(function(err, data){
-                if (err) {
-                    response.status(500).json(
-                        {
-                            error   : {code : 500, message : err}, 
-                            success : false
-                        }
-                    );
-                }
-                else {
-                    response.status(200).json(
-                        {
-                            data    : {user : luis, info: person},
-                            success : true
-                        }
-                    );
-                }
-            });
-
-        }
-    });
-
-});
-
-
-
-router.post('/authenticate', (request, response, next) => {
-    
-    
-    User.findOne({email: request.body.email}).exec()
-
-    .then(user => {
-        console.log('user'+user)
-        if (user) {
-            if (bcrypt.compareSync(request.body.password, user.password)) {
-                var JWToken = jwt.sign({email:user.email, id:user._id}, app.get('superSecret'), {expiresIn: 1440});
-                
-                var userJSON = user.toJSON();
-                delete userJSON.password
-                response.status(200).json({
-                    data: {
-                        user:userJSON,
-                        token:JWToken
-                    },
-                    success: true
-                });
+    db.none('INSERT INTO users(id, email, password, first_name, last_name)'+'VALUES($1, $2, $3, $4, $5)', [id, email, hashedPassword, firstName, lastName])
+    .then(function (data) {
+        response.status(200).json(
+            {
+                data    : {message : 'Default User succesfully created.'},
+                success : true
             }
-            else {
-                response.status(401).json(
-                    {
-                        error:{
-                            code: 401,
-                            message:'Authentication failed'
-                        },
-                        success: false
-                    }
-                );
-            }
-
-
-        } else {
-            response.status(401).json(
-                {
-                    error:{
-                        code: 401,
-                        message:'Authentication failed'
-                    },
-                    success: false
-                }
-            );
-        }
-        
+        );
     })
-    .catch(err =>{
-        console.log(err)
-        response.status(500).json({
-            error: err
-        });
+    .catch(function (err) {
+        response.status(500).json(
+            {
+                error   : {code : 500, message : err},
+                success : false
+            }
+        );
     });
+
 });
+
+
+
+
 
 
 
@@ -229,7 +165,7 @@ router.use((request, response, next) => {
                 
                 return response.json(
                     {  
-                        message: 'Failed to authenticate token.' ,
+                        message: 'Failed to authenticate token' ,
                         success: false
                     }
                 );    

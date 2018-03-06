@@ -6,7 +6,7 @@ var db = require('../../db.js');
 
 
 exports.getAll = function(request, response) {
-    db.any('SELECT * FROM users')
+    db.any('SELECT id, email, first_name, last_name FROM users')
     .then(function (data) {
         response.status(200).json(
             {
@@ -28,24 +28,7 @@ exports.getAll = function(request, response) {
 
 exports.create = function(request, response) {
 
-    req.body.age = parseInt(req.body.age);
-    db.none('insert into pups(name, breed, age, sex)'+'values(${name}, ${breed}, ${age}, ${sex})', req.body)
-    .then(function () {
-        response.status(200).json(
-            {
-                data    : {users : data},
-                success : true
-            }
-        );
-    })
-    .catch(function (err) {
-        response.status(500).json(
-            {
-                error   : {code : 500, message : err},
-                success : false
-            }
-        );
-    });
+    
 };
 
 
