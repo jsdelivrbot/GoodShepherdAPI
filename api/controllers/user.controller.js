@@ -6,7 +6,7 @@ var db = require('../../db.js');
 
 
 exports.getAll = function(request, response) {
-    db.any('SELECT id, email, first_name, last_name FROM users')
+    db.any('SELECT id, email, first_given_name, second_given_name, first_surname, second_surname FROM users')
     .then(function (data) {
         response.status(200).json(
             {
