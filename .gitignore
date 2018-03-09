@@ -35,6 +35,8 @@ build/Release
 
 # Dependency directories
 node_modules/
+.elasticbeanstalk/
+.gitignore
 jspm_packages/
 
 # Typescript v1 declaration files
@@ -57,6 +59,7 @@ typings/
 
 # dotenv environment variables file
 .env
+
 
 
 # Elastic Beanstalk Files
