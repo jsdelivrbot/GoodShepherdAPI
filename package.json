@@ -1,6 +1,7 @@
 {
   "name": "goodshepherdapi",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A simple API for handle sheep information",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -20,5 +21,13 @@
     "ejs": "^2.5.6",
     "eslint": "^4.16.0",
     "jsonwebtoken": "^8.1.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luisperezzz/GoodShepherdAPI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/luisperezzz/GoodShepherdAPI/issues"
+  },
+  "homepage": "https://github.com/luisperezzz/GoodShepherdAPI#readme"
 }
