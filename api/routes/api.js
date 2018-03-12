@@ -18,7 +18,7 @@ router.post('/signup', (request, response) => {
 
     var password  = bcrypt.hashSync(request.body.password, 10);
 
-    db.none('INSERT INTO users(id, email, password, first_given_name, second_given_name, first_surname, second_surname)'+'VALUES($1, $2, $3, $4, $5, $6, $7)', [request.body.id, request.body.email, password, request.body.first_given_name, request.body.second_given_name, request.body.first_surname, request.body.second_surname])
+    db.none('INSERT INTO users(email, password, first_given_name, second_given_name, first_surname, second_surname)'+'VALUES($1, $2, $3, $4, $5, $6)', [request.body.email, password, request.body.first_given_name, request.body.second_given_name, request.body.first_surname, request.body.second_surname])
     .then(function (data) {
         response.status(200).json(
             {
@@ -115,7 +115,6 @@ router.post('/login', (request, response) => {
 
 router.post('/setup', (request, response, next) => {
 
-    var id = 0
     var email = "lpramirez2413@gmail.com"
     var password = "master"
     var firstName = "Luis"
@@ -123,7 +122,7 @@ router.post('/setup', (request, response, next) => {
 
     var hashedPassword  = bcrypt.hashSync(password, 10);
 
-    db.none('INSERT INTO users(id, email, password, first_name, last_name)'+'VALUES($1, $2, $3, $4, $5)', [id, email, hashedPassword, firstName, lastName])
+    db.none('INSERT INTO users(email, password, first_name, last_name)'+'VALUES($1, $2, $3, $4, $5)', [email, hashedPassword, firstName, lastName])
     .then(function (data) {
         response.status(200).json(
             {
@@ -188,7 +187,6 @@ router.post('/', (request, response, next) => {
         message:'Welcome to the GoodShepherd API'
     });
 });
-
 
 
 module.exports = router;
