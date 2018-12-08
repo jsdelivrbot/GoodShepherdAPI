@@ -2,7 +2,7 @@
   "name": "Good Shepherd API",
   "description": "A simple API for handle sheep information",
   "repository": "https://github.com/luisperezzz/GoodShepherdAPI",
-  "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
+  "logo": "https://cdn.jsdelivr.net/gh/heroku/node-js-getting-started/public/node.svg",
   "keywords": ["node", "express", "heroku", "mongodb"],
   "image": "heroku/nodejs"
 }
